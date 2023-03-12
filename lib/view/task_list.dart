@@ -4,20 +4,26 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
-class TaskListView extends StatelessWidget {
+class TaskListView extends StatefulWidget {
   const TaskListView({super.key});
 
+  @override
+  State<TaskListView> createState() => _TaskListViewState();
+}
+
+class _TaskListViewState extends State<TaskListView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ViewApp>(builder: (context, viewmodel, child) {
       return Container(
           decoration: BoxDecoration(
               color: viewmodel.clrLv2,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(0))),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(0))),
           child: ListView.separated(
-            padding: EdgeInsets.all(15),
+            padding: const EdgeInsets.all(15),
             separatorBuilder: (context, index) {
-              return SizedBox(height: 15);
+              return const SizedBox(height: 15);
             },
             itemCount: viewmodel.numTasks,
             itemBuilder: (context, index) {
@@ -27,13 +33,13 @@ class TaskListView extends StatelessWidget {
                   viewmodel.deletetask(index);
                 },
                 background: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 5),
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
                   decoration: BoxDecoration(
-                    color: Colors.red.shade300,
-                    borderRadius: BorderRadius.circular(20)),
-                    child:Center(child: Icon(Icons.delete,color:Colors.red.shade900)),
-                    ),
-                  
+                      color: Colors.red.shade300,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Center(
+                      child: Icon(Icons.delete, color: Colors.red.shade900)),
+                ),
                 child: Container(
                   decoration: BoxDecoration(
                       color: viewmodel.clrLv1,
