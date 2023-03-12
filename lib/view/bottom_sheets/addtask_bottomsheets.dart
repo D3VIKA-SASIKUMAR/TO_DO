@@ -24,7 +24,7 @@ class AddTaskBottomSheeet extends StatelessWidget {
                 child: TextField(
                   onSubmitted: (value) {
                     if (entryController.text.isNotEmpty) {
-                      task newtask = task(entryController.text, false);
+                      Task newtask = Task(entryController.text, false);
                       viewmodel.addtask(newtask);
                       entryController.clear();
                     }

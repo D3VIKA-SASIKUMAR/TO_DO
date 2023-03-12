@@ -1,10 +1,24 @@
+import 'dart:convert';
+
+import 'package:TASK/helper/data_supplier.dart';
 import 'package:TASK/model/task_models.dart';
 import 'package:TASK/model/user_model.dart';
 import 'package:flutter/material.dart';
 
 class ViewApp extends ChangeNotifier {
-  List<task> tasks = <task>[];
+  List<Task> tasks = <Task>[];
   User user = User("DEV");
+  static String key = "items";
+  ViewApp() {
+    getExisting();
+  }
+
+  void getExisting() {
+    DataSupplier.getList(key).then((value) {
+      tasks = value.map((e) => Task.fromJson(jsonDecode(e))).toList();
+      notifyListeners();
+    });
+  }
 
   Color clrLv1 = Colors.green.shade50;
   Color clrLv2 = Colors.green.shade200;
@@ -17,9 +31,17 @@ class ViewApp extends ChangeNotifier {
 
   String get username => user.username;
 
-  void addtask(task newtask) {
+  void refreshList() {
+    DataSupplier.saveList(
+            key, tasks.map((e) => jsonEncode(e.toJson())).toList())
+        .then((value) {
+      getExisting();
+    });
+  }
+
+  void addtask(Task newtask) {
     tasks.add(newtask);
-    notifyListeners();
+    refreshList();
   }
 
   bool gettaskValue(int taskIndex) {
@@ -32,12 +54,12 @@ class ViewApp extends ChangeNotifier {
 
   void deletetask(int taskIndex) {
     tasks.removeAt(taskIndex);
-    notifyListeners();
+    refreshList();
   }
 
   void settaskvalue(int taskIndex, bool taskValue) {
     tasks[taskIndex].complete = taskValue;
-    notifyListeners();
+    refreshList();
   }
 
   void updateUsername(String newUsername) {
@@ -47,12 +69,12 @@ class ViewApp extends ChangeNotifier {
 
   void deleteAllTasks() {
     tasks.clear();
-    notifyListeners();
+    refreshList();
   }
 
   void deleteCompletedtasks() {
     tasks = tasks.where((task) => !task.complete).toList();
-    notifyListeners();
+    refreshList();
   }
 
   void bottomSheetBuilder(Widget bottomSheetView, BuildContext context) {
